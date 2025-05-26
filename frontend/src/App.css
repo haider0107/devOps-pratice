@@ -12,25 +12,7 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+  filter: drop-shadow(0 0 2em #ffc164aa);
 }
 
 .card {
@@ -39,4 +21,70 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.course-card {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+}
+
+.course-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.course-details {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.course-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.topic-tag {
+  background: #646cff;
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.instructor {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #888;
+}
+
+.data-source {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: #646cff33;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
