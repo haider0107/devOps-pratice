@@ -3,5 +3,5 @@ export function getVersion() {
 }
 
 export function getHostName() {
-  return "duper unknown";
+  return "";
 }
