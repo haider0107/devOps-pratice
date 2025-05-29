@@ -1,6 +1,6 @@
-cd backend
-npm run lint
-npm run test
+cd backend-TS
+npx lint-staged
+npm test
 npm run build
 
 cd ..

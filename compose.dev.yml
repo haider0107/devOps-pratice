@@ -1,0 +1,67 @@
+name: fullstack-devops
+
+services:
+  fullstack-db:
+    image: mongo:8.0.9
+    container_name: fullstack-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - fullstack-db-vol:/data/db
+    networks:
+      - fullstack-network
+
+  fullstack-redis:
+    image: redis:8.0.0-alpine
+    container_name: fullstack-redis
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - fullstack-redis-vol:/data/redis
+    networks:
+      - fullstack-network
+
+  fullstack-backend:
+    build:
+      dockerfile: docker/Dockerfile.dev
+      context: ./backend
+    container_name: fullstack-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - fullstack-db
+      - fullstack-redis
+    networks:
+      - fullstack-network
+
+  fullstack-frontend:
+    build:
+      dockerfile: docker/Dockerfile.dev
+      context: ./frontend
+    container_name: fullstack-frontend
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - fullstack-backend
+    networks:
+      - fullstack-network
+
+networks:
+  fullstack-network:
+    driver: bridge
+
+volumes:
+  fullstack-db-vol:
+  fullstack-redis-vol:
