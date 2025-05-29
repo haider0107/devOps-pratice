@@ -29,6 +29,12 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
+// app.get('/new', (_req: Request, res: Response) => {
+//   res.status(200).json({
+//     message: 'New chai code API ☕️',
+//   });
+// });
+
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({ alive: true });
 });

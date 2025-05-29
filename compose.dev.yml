@@ -26,14 +26,14 @@ services:
   fullstack-backend:
     build:
       dockerfile: docker/Dockerfile.dev
-      context: ./backend
+      context: ./backend-TS
     container_name: fullstack-backend
     ports:
       - "8080:8080"
     env_file:
-      - ./backend/.env
+      - ./backend-TS/.env
     volumes:
-      - ./backend:/app
+      - ./backend-TS:/app
       - /app/node_modules
     depends_on:
       - fullstack-db
