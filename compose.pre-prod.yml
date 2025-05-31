@@ -17,7 +17,6 @@ services:
       - fullstack-db-vol:/data/db
     networks:
       - fullstack-network
-
   fullstack-redis:
     image: redis:8.0.0-alpine
     deploy:
@@ -30,7 +29,12 @@ services:
         parallelism: 1
         order: stop-first
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      test:
+        - CMD
+        - redis-cli
+        - '--raw'
+        - incr
+        - ping
     environment:
       - REDIS_PASSWORD=chaicode
     command: redis-server --requirepass chaicode
@@ -38,9 +42,8 @@ services:
       - fullstack-redis-vol:/data
     networks:
       - fullstack-network
-
   fullstack-backend:
-    image: kushal0107/fullstack-backend:v1.1
+    image: kushal0107/fullstack-backend:build-016e56c758e0e01ef238653c67bc7ece33d295a9
     deploy:
       replicas: 2
       update_config:
@@ -54,12 +57,12 @@ services:
       test:
         - CMD
         - wget
-        - "--no-verbose"
-        - "--tries=1"
-        - "--spider"
+        - '--no-verbose'
+        - '--tries=1'
+        - '--spider'
         - http://localhost:8080/health
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       - PORT=8080
       - MONGO_URL=mongodb://chaicode:chaicode@fullstack-db:27017
@@ -69,9 +72,8 @@ services:
       - FRONTEND_URL=http://13.203.226.166:5173
     networks:
       - fullstack-network
-
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:v1.1
+    image: kushal0107/fullstack-frontend:build-016e56c758e0e01ef238653c67bc7ece33d295a9
     deploy:
       replicas: 1
       update_config:
@@ -82,22 +84,24 @@ services:
         parallelism: 1
         order: stop-first
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - http://localhost:5173
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     ports:
-      - "5173:5173"
+      - '5173:5173'
     environment:
       - VITE_BACKEND_URL=http://13.203.226.166:8080
     networks:
       - fullstack-network
-
 networks:
   fullstack-network:
     driver: overlay
-
 volumes:
-  fullstack-db-vol:
-  fullstack-redis-vol:
+  fullstack-db-vol: null
+  fullstack-redis-vol: null
