@@ -1,0 +1,88 @@
+name: fullstack CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FRONTEND-IMAGE: kushal0107/fullstack-frontend
+      BACKEND-IMAGE: kushal0107/fullstack-backend
+      BUILD-TAG: build-${{github.sha}}
+    steps:
+      - name: Checkout the source code
+        uses: actions/checkout@v4
+        with:
+          persistent-credentials: true
+
+      - name: Build frontend docker image
+        run: docker build -f frontend/docker/Dockerfile.dev -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 .
+
+      - name: Build backend docker image
+        run: docker build -f backend-TS/docker/Dockerfile.dev -t ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 .
+
+      - name: Login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: push docker images
+        run: |
+          docker push ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
+          docker push ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
+
+      - name: update frontend image in compose file
+        uses: fjogeleit/yaml-update-action@v0.16.1
+        with:
+          valuefile: compose.pre-prod.yml
+          propertyPath: 'services["fullstack-frontend"].image'
+          value: ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
+          commitChange: false
+      - name: update backend image in compose file
+        uses: fjogeleit/yaml-update-action@v0.16.1
+        with:
+          valuefile: compose.pre-prod.yml
+          propertyPath: 'services["fullstack-backend"].image'
+          value: ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
+          commitChange: false
+      - name: Commit the changes
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-action@github.com
+          git add .
+          git commit -m "bump the image version ${{env.BUILD-TAG}}"
+          git push
+  deploy:
+    name: Deploy the image to Docker Swarm Cluster
+    runs-on: ubuntu-latest
+    env:
+      FRONTEND-IMAGE: kushal0107/fullstack-frontend
+      BACKEND-IMAGE: kushal0107/fullstack-backend
+      BUILD-TAG: build-${{github.sha}}
+    needs:
+      - build-and-push
+    steps:
+      - name: SSH into the server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{secrets.SWARM_MANAGER_HOST}}
+          username: ${{secrets.SWARM_HOST_USERNAME}}
+          key: ${{secrets.SWARM_HOST_SSH_KEY}}
+          port: ${{secrets.SWARM_HOST_SSH_PORT}}
+          script: |
+            set -e
+            cd ~/devOps-pratice
+
+            # pull compose file using git
+            git fetch origin main
+            git checkout origin/main
+
+            docker pull ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
+            docker pull ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
+            docker stack deploy -c compose.pre-prod.yml fullstack-app
