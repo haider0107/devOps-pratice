@@ -21,10 +21,10 @@ jobs:
           persistent-credentials: true
 
       - name: Build frontend docker image
-        run: docker build -f frontend/docker/Dockerfile.dev -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 .
+        run: docker build -f frontend/docker/Dockerfile.dev -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./frontend
 
       - name: Build backend docker image
-        run: docker build -f backend-TS/docker/Dockerfile.dev -t ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 .
+        run: docker build -f backend-TS/docker/Dockerfile.dev -t ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./backend-TS
 
       - name: Login to docker hub
         uses: docker/login-action@v3
