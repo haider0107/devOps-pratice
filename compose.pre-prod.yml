@@ -42,7 +42,7 @@ services:
   fullstack-backend:
     image: kushal0107/fullstack-backend:v1.1
     deploy:
-      replicas: 2
+      replicas: 1
       update_config:
         order: start-first
         failure_action: rollback
