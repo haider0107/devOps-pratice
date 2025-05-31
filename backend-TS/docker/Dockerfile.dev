@@ -11,8 +11,20 @@ RUN npm install
 # Copy app files
 COPY . .
 
+# Copy wait-for-it
+COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
+
+# Copy entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Expose port
 EXPOSE 8080
+
+# Set entrypoint
+ENTRYPOINT ["entrypoint.sh"]
 
 # Start in dev mode with nodemon
 CMD ["npm", "run", "dev"]
