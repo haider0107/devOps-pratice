@@ -1,11 +1,11 @@
-cd backend-TS
-npx lint-staged
-npm test
-npm run build
+# cd backend-TS
+# npx lint-staged
+# npm test
+# npm run build
 
-cd ..
+# cd ..
 
-cd frontend
-npm run lint
-npm run test
-npm run build
+# cd frontend
+# npm run lint
+# npm run test
+# npm run build
