@@ -40,14 +40,14 @@ jobs:
       - name: update frontend image in compose file
         uses: fjogeleit/yaml-update-action@v0.16.1
         with:
-          valuefile: compose.pre-prod.yml
+          valuefile: compose.prod.yml
           propertyPath: 'services["fullstack-frontend"].image'
           value: ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
           commitChange: false
       - name: update backend image in compose file
         uses: fjogeleit/yaml-update-action@v0.16.1
         with:
-          valuefile: compose.pre-prod.yml
+          valuefile: compose.prod.yml
           propertyPath: 'services["fullstack-backend"].image'
           value: ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
           commitChange: false
