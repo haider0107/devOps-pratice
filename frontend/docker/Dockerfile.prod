@@ -38,4 +38,4 @@ USER appuser
 
 ENTRYPOINT ["entrypoint.sh"]
 
-CMD ["serve", "-s", "dist"]
+CMD ["serve", "-s", "dist", "-l" ,"5173"]
