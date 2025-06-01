@@ -1,0 +1,41 @@
+From node:22-slim AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+# Ignore scripts to run
+RUN npm ci --ignore-scripts 
+
+COPY . .
+
+RUN npm run build
+
+RUN npm prune --omit=dev
+
+FROM node:22-slim AS runner
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+RUN npm i -g serve
+
+COPY --from=builder /app/dist ./dist
+
+COPY --from=builder /app/node_modules ./node_modules
+
+COPY --from=builder /app/wait-for-it.sh /usr/local/bin/wait-for-it.sh
+COPY --from=builder /app/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+EXPOSE 5173
+
+RUN useradd -m appuser
+USER appuser
+
+ENTRYPOINT ["entrypoint.sh"]
+
+CMD ["serve", "-s", "dist"]

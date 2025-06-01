@@ -1,0 +1,107 @@
+services:
+  fullstack-db:
+    image: mongo:8.0.9
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=chaicode
+      - MONGO_INITDB_ROOT_PASSWORD=chaicode
+    volumes:
+      - fullstack-db-vol:/data/db
+    networks:
+      - fullstack-network
+  fullstack-redis:
+    image: redis:8.0.0-alpine
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - "--raw"
+        - incr
+        - ping
+    environment:
+      - REDIS_PASSWORD=chaicode
+    command: redis-server --requirepass chaicode
+    volumes:
+      - fullstack-redis-vol:/data
+    networks:
+      - fullstack-network
+  fullstack-backend:
+    image: kushal0107/fullstack-backend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - "--no-verbose"
+        - "--tries=1"
+        - "--spider"
+        - http://localhost:8080/health
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MONGO_URL=mongodb://chaicode:chaicode@fullstack-db:27017
+      - REDIS_PASSWORD=chaicode
+      - REDIS_HOST=fullstack-redis
+      - REDIS_PORT=6379
+      - FRONTEND_URL=http://3.108.51.43:5173
+    networks:
+      - fullstack-network
+  fullstack-frontend:
+    image: kushal0107/fullstack-frontend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - "-f"
+        - http://localhost:5173
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://3.108.51.43:8080
+    networks:
+      - fullstack-network
+networks:
+  fullstack-network:
+    driver: overlay
+volumes:
+  fullstack-db-vol: null
+  fullstack-redis-vol: null

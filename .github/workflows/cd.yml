@@ -21,10 +21,10 @@ jobs:
           persistent-credentials: true
 
       - name: Build frontend docker image
-        run: docker build -f frontend/docker/Dockerfile.dev -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./frontend
+        run: docker build -f frontend/docker/Dockerfile.prod -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./frontend
 
       - name: Build backend docker image
-        run: docker build -f backend-TS/docker/Dockerfile.dev -t ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./backend-TS
+        run: docker build -f backend-TS/docker/Dockerfile.prod -t ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}} --platform linux/amd64 ./backend-TS
 
       - name: Login to docker hub
         uses: docker/login-action@v3
@@ -85,4 +85,4 @@ jobs:
 
             docker pull ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
             docker pull ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
-            docker stack deploy -c compose.pre-prod.yml fullstack-app
+            docker stack deploy -c compose.prod.yml fullstack-app
