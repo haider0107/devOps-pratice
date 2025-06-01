@@ -32,7 +32,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - "--raw"
+        - '--raw'
         - incr
         - ping
     environment:
@@ -43,7 +43,7 @@ services:
     networks:
       - fullstack-network
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    image: kushal0107/fullstack-backend:build-8f72be0ae5ef59ac55f5447c52e45ebd7cb91b82
     deploy:
       replicas: 1
       update_config:
@@ -57,12 +57,12 @@ services:
       test:
         - CMD
         - wget
-        - "--no-verbose"
-        - "--tries=1"
-        - "--spider"
+        - '--no-verbose'
+        - '--tries=1'
+        - '--spider'
         - http://localhost:8080/health
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       - PORT=8080
       - MONGO_URL=mongodb://chaicode:chaicode@fullstack-db:27017
@@ -73,7 +73,7 @@ services:
     networks:
       - fullstack-network
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    image: kushal0107/fullstack-frontend:build-8f72be0ae5ef59ac55f5447c52e45ebd7cb91b82
     deploy:
       replicas: 1
       update_config:
@@ -87,14 +87,14 @@ services:
       test:
         - CMD
         - curl
-        - "-f"
+        - '-f'
         - http://localhost:5173
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     ports:
-      - "5173:5173"
+      - '5173:5173'
     environment:
       - VITE_BACKEND_URL=http://3.108.51.43:8080
     networks:
