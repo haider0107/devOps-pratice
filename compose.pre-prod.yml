@@ -43,7 +43,7 @@ services:
     networks:
       - fullstack-network
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    image: kushal0107/fullstack-backend:build-7028e11575c64afe9960729336579f51158d26e6
     deploy:
       replicas: 1
       update_config:
@@ -73,7 +73,7 @@ services:
     networks:
       - fullstack-network
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-c9d2db26529770ab2902c6c521ace907adcdae7b
+    image: kushal0107/fullstack-frontend:build-7028e11575c64afe9960729336579f51158d26e6
     deploy:
       replicas: 1
       update_config:
