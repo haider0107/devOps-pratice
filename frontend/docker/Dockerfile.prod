@@ -2,6 +2,10 @@ From node:22-slim AS builder
 
 WORKDIR /app
 
+# accept the environment variables from outside
+ARG VITE_BACKEND_URL
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
+
 COPY package*.json ./
 
 # Ignore scripts to run
@@ -24,10 +28,6 @@ RUN npm i -g serve
 COPY --from=builder /app/dist ./dist
 
 COPY --from=builder /app/node_modules ./node_modules
-
-# accept the environment variables from outside
-ARG VITE_BACKEND_URL
-ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 
 COPY --from=builder /app/wait-for-it.sh /usr/local/bin/wait-for-it.sh
 COPY --from=builder /app/entrypoint.sh /usr/local/bin/entrypoint.sh
