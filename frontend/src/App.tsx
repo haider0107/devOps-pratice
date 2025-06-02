@@ -64,6 +64,8 @@ function App() {
           `${import.meta.env.VITE_BACKEND_URL}/version`
         );
 
+        console.log(import.meta.env.VITE_BACKEND_URL);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
