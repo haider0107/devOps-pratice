@@ -19,7 +19,42 @@ jobs:
       - name: Checkout the source code
         uses: actions/checkout@v4
         with:
-          persistent-credentials: true
+          persistent-credentials: false
+
+      - name: update frontend image in compose file
+        uses: fjogeleit/yaml-update-action@v0.16.1
+        with:
+          valuefile: compose.prod.yml
+          propertyPath: 'services["fullstack-frontend"].image'
+          value: ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
+          commitChange: false
+
+      - name: update backend image in compose file
+        uses: fjogeleit/yaml-update-action@v0.16.1
+        with:
+          valuefile: compose.prod.yml
+          propertyPath: 'services["fullstack-backend"].image'
+          value: ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
+          commitChange: false
+
+      - name: Generate APP Token
+        uses: tibdex/github-app-token@v2
+        id: generate_token
+        with:
+          app_id: ${{secrets.APP_ID}}
+          private_key: ${{secrets.APP_SECRET_KEY}}
+
+      - name: Commit files
+        run: |
+          git config --local user.name github-actions
+          git config --local user.email github-action@github.com
+          git add .
+          git commit -m "bump the image version ${{env.BUILD-TAG}} [skip ci]"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ steps.generate_token.outputs.token }}
 
       - name: Build frontend docker image
         run: docker build -f frontend/docker/Dockerfile.prod -t ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}} --build-arg VITE_BACKEND_URL=${{env.VITE_BACKEND_URL}} --platform linux/amd64 ./frontend
@@ -38,27 +73,13 @@ jobs:
           docker push ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
           docker push ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
 
-      - name: update frontend image in compose file
-        uses: fjogeleit/yaml-update-action@v0.16.1
-        with:
-          valuefile: compose.prod.yml
-          propertyPath: 'services["fullstack-frontend"].image'
-          value: ${{env.FRONTEND-IMAGE}}:${{env.BUILD-TAG}}
-          commitChange: false
-      - name: update backend image in compose file
-        uses: fjogeleit/yaml-update-action@v0.16.1
-        with:
-          valuefile: compose.prod.yml
-          propertyPath: 'services["fullstack-backend"].image'
-          value: ${{env.BACKEND-IMAGE}}:${{env.BUILD-TAG}}
-          commitChange: false
-      - name: Commit the changes
-        run: |
-          git config --global user.name github-actions
-          git config --global user.email github-action@github.com
-          git add .
-          git commit -m "bump the image version ${{env.BUILD-TAG}}"
-          git push
+      # - name: Commit the changes
+      #   run: |
+      #     git config --global user.name github-actions
+      #     git config --global user.email github-action@github.com
+      #     git add .
+      #     git commit -m "bump the image version ${{env.BUILD-TAG}}"
+      #     git push
   deploy:
     name: Deploy the image to Docker Swarm Cluster
     runs-on: ubuntu-latest
