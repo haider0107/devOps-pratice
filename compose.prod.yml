@@ -11,12 +11,15 @@ services:
         parallelism: 1
         order: stop-first
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=chaicode
-      - MONGO_INITDB_ROOT_PASSWORD=chaicode
+      - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/MONGO_INITDB_ROOT_PASSWORD
     volumes:
       - fullstack-db-vol:/data/db
     networks:
       - fullstack-network
+    secrets:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
   fullstack-redis:
     image: redis:8.0.0-alpine
     deploy:
@@ -35,13 +38,14 @@ services:
         - "--raw"
         - incr
         - ping
-    environment:
-      - REDIS_PASSWORD=chaicode
-    command: redis-server --requirepass chaicode
+    command: bash -c "up-redis.sh"
     volumes:
       - fullstack-redis-vol:/data
+      - /home/github-user/up-redis.sh:/usr/local/bin/up-redis.sh
     networks:
       - fullstack-network
+    secrets:
+      - REDIS_PASSWORD
   fullstack-backend:
     image: kushal0107/fullstack-backend:build-8f72be0ae5ef59ac55f5447c52e45ebd7cb91b82
     deploy:
@@ -65,13 +69,20 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
-      - MONGO_URL=mongodb://chaicode:chaicode@fullstack-db:27017
-      - REDIS_PASSWORD=chaicode
+      - MONGO_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
+      - MONGO_PASSWORD_FILE=/run/secrets/MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_HOST=fullstack-db
+      - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
       - REDIS_HOST=fullstack-redis
       - REDIS_PORT=6379
       - FRONTEND_URL=http://3.108.51.43:5173
+      - NODE_HOST="{{.Node.Hostname}}"
     networks:
       - fullstack-network
+    secrets:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - REDIS_PASSWORD
   fullstack-frontend:
     image: kushal0107/fullstack-frontend:build-8f72be0ae5ef59ac55f5447c52e45ebd7cb91b82
     deploy:
@@ -105,3 +116,10 @@ networks:
 volumes:
   fullstack-db-vol: null
   fullstack-redis-vol: null
+secrets:
+  MONGO_INITDB_ROOT_USERNAME:
+    external: true
+  MONGO_INITDB_ROOT_PASSWORD:
+    external: true
+  REDIS_PASSWORD:
+    external: true
