@@ -35,7 +35,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - '--raw'
+        - "--raw"
         - incr
         - ping
     command: sh -c "up-redis.sh"
@@ -61,12 +61,12 @@ services:
       test:
         - CMD
         - wget
-        - '--no-verbose'
-        - '--tries=1'
-        - '--spider'
+        - "--no-verbose"
+        - "--tries=1"
+        - "--spider"
         - http://localhost:8080/health
     ports:
-      - '8080:8080'
+      - "8080:8080"
     environment:
       - PORT=8080
       - MONGO_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
@@ -98,14 +98,14 @@ services:
       test:
         - CMD
         - curl
-        - '-f'
+        - "-f"
         - http://localhost:5173
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     ports:
-      - '5173:5173'
+      - "5173:5173"
     environment:
       - VITE_BACKEND_URL=http://3.108.51.43:8080
     networks:
