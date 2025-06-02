@@ -38,7 +38,7 @@ services:
         - '--raw'
         - incr
         - ping
-    command: bash -c "up-redis.sh"
+    command: sh -c "up-redis.sh"
     volumes:
       - fullstack-redis-vol:/data
       - /home/github-user/up-redis.sh:/usr/local/bin/up-redis.sh
