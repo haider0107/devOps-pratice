@@ -64,6 +64,7 @@ function App() {
           `${import.meta.env.VITE_BACKEND_URL}/version`
         );
 
+        // VITE_BACKEND_URL
         console.log(import.meta.env.VITE_BACKEND_URL);
 
         if (!response.ok) {
