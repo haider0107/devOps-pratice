@@ -75,7 +75,7 @@ services:
       - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
       - REDIS_HOST=fullstack-redis
       - REDIS_PORT=6379
-      - FRONTEND_URL=http://3.108.51.43:5173
+      - FRONTEND_URL=http://43.204.114.169:5173
       - NODE_HOST="{{.Node.Hostname}}"
     networks:
       - fullstack-network
@@ -107,7 +107,7 @@ services:
     ports:
       - '5173:5173'
     environment:
-      - VITE_BACKEND_URL=http://3.108.51.43:8080
+      - VITE_BACKEND_URL=http://43.204.114.169:8080
     networks:
       - fullstack-network
 networks:

@@ -14,7 +14,7 @@ jobs:
       FRONTEND-IMAGE: kushal0107/fullstack-frontend
       BACKEND-IMAGE: kushal0107/fullstack-backend
       BUILD-TAG: build-${{github.sha}}
-      VITE_BACKEND_URL: http://3.108.51.43:8080
+      VITE_BACKEND_URL: http://43.204.114.169:8080
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v4
