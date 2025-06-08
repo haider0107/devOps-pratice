@@ -3,9 +3,9 @@
 }
 
 devops.kb-blogs.in {
-    reverse_proxy fullstack-frontend:5173
+    reverse_proxy localhost:5173
 }
 
 devops-api.kb-blogs.in {
-    reverse_proxy fullstack-backend:8080
+    reverse_proxy localhost:8080
 }
