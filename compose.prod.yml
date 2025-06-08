@@ -111,7 +111,7 @@ services:
 networks:
   fullstack-network:
     driver: overlay
-  shared-net:
+  caddy-proxy_shared-net:
     external: true
 volumes:
   fullstack-db-vol: null
