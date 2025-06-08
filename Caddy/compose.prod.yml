@@ -1,0 +1,33 @@
+services:
+  caddy:
+    image: caddy:2.6.2-alpine
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: start-first
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - host
+    configs:
+      - source: Caddyfile
+        target: /etc/caddy/Caddyfile
+networks:
+  host:
+    name: host
+    external: true
+volumes:
+  caddy_data: null
+  caddy_config: null
+configs:
+  Caddyfile:
+    file: ./Caddyfile
