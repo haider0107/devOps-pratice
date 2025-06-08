@@ -47,7 +47,7 @@ services:
     secrets:
       - REDIS_PASSWORD
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-d827219673d5f40c0f436bbe4d8ef05309f14eb8
+    image: kushal0107/fullstack-backend:build-9ca978172ba61e51423ffaedde7b4c4a427eea5d
     deploy:
       replicas: 1
       update_config:
@@ -83,7 +83,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD
       - REDIS_PASSWORD
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-d827219673d5f40c0f436bbe4d8ef05309f14eb8
+    image: kushal0107/fullstack-frontend:build-9ca978172ba61e51423ffaedde7b4c4a427eea5d
     deploy:
       replicas: 1
       update_config:
@@ -108,28 +108,6 @@ services:
     networks:
       - fullstack-network
       - shared-net
-  # caddy:
-  #   image: caddy:2.6.2-alpine
-  #   deploy:
-  #     replicas: 1
-  #     update_config:
-  #       order: start-first
-  #       failure_action: rollback
-  #       delay: 10s
-  #     rollback_config:
-  #       parallelism: 1
-  #       order: start-first
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - caddy_data:/data
-  #     - caddy_config:/config
-  #   networks:
-  #     - fullstack-network
-  #   configs:
-  #     - source: Caddyfile
-  #       target: /etc/caddy/Caddyfile
 networks:
   fullstack-network:
     driver: overlay
