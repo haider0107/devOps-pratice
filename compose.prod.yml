@@ -35,7 +35,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - '--raw'
+        - "--raw"
         - incr
         - ping
     command: sh -c "up-redis.sh"
@@ -61,10 +61,12 @@ services:
       test:
         - CMD
         - wget
-        - '--no-verbose'
-        - '--tries=1'
-        - '--spider'
+        - "--no-verbose"
+        - "--tries=1"
+        - "--spider"
         - http://localhost:8080/health
+    ports:
+      - "8080:8080"
     environment:
       - PORT=8080
       - MONGO_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
@@ -96,46 +98,46 @@ services:
       test:
         - CMD
         - curl
-        - '-f'
+        - "-f"
         - http://localhost:5173
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    ports:
+      - "5173:5173"
     environment:
       - VITE_BACKEND_URL=https://devops-api.kb-blogs.in
     networks:
       - fullstack-network
-  caddy:
-    image: caddy:2.6.2-alpine
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
-        failure_action: rollback
-        delay: 10s
-      rollback_config:
-        parallelism: 1
-        order: start-first
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - fullstack-network
-    configs:
-      - source: Caddyfile
-        target: /etc/caddy/Caddyfile
+  # caddy:
+  #   image: caddy:2.6.2-alpine
+  #   deploy:
+  #     replicas: 1
+  #     update_config:
+  #       order: start-first
+  #       failure_action: rollback
+  #       delay: 10s
+  #     rollback_config:
+  #       parallelism: 1
+  #       order: start-first
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+  #   networks:
+  #     - fullstack-network
+  #   configs:
+  #     - source: Caddyfile
+  #       target: /etc/caddy/Caddyfile
 networks:
   fullstack-network:
     driver: overlay
 volumes:
   fullstack-db-vol: null
   fullstack-redis-vol: null
-  caddy_data: null
-  caddy_config: null
 secrets:
   MONGO_INITDB_ROOT_USERNAME:
     external: true
@@ -143,6 +145,3 @@ secrets:
     external: true
   REDIS_PASSWORD:
     external: true
-configs:
-  Caddyfile:
-    file: ./Caddyfile

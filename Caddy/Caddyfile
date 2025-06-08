@@ -1,0 +1,11 @@
+{
+    email me@kb-blogs.in
+}
+
+devops.kb-blogs.in {
+    reverse_proxy localhost:5173
+}
+
+devops-api.kb-blogs.in {
+    reverse_proxy localhost:8080
+}
