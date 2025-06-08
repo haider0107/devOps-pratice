@@ -65,8 +65,6 @@ services:
         - "--tries=1"
         - "--spider"
         - http://localhost:8080/health
-    ports:
-      - "8080:8080"
     environment:
       - PORT=8080
       - MONGO_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
@@ -79,6 +77,7 @@ services:
       - NODE_HOST="{{.Node.Hostname}}"
     networks:
       - fullstack-network
+      - shared-net
     secrets:
       - MONGO_INITDB_ROOT_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD
@@ -104,12 +103,11 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    ports:
-      - "5173:5173"
     environment:
       - VITE_BACKEND_URL=https://devops-api.kb-blogs.in
     networks:
       - fullstack-network
+      - shared-net
   # caddy:
   #   image: caddy:2.6.2-alpine
   #   deploy:
@@ -135,6 +133,8 @@ services:
 networks:
   fullstack-network:
     driver: overlay
+  shared-net:
+    external: true
 volumes:
   fullstack-db-vol: null
   fullstack-redis-vol: null

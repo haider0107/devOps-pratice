@@ -17,14 +17,12 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     networks:
-      - host
+      - shared-net
     configs:
       - source: Caddyfile
         target: /etc/caddy/Caddyfile
 networks:
-  host:
-    name: host
-    external: true
+  shared-net:
 volumes:
   caddy_data: null
   caddy_config: null
