@@ -22,10 +22,10 @@ scrape_configs:
     #       target_label: instance
     #     - target_label: __address__
     #       replacement: cadvisor:8080
-  - job_name: "node-exporter"
-    dns_sd_configs:
-      - names: ["tasks.node-exporter"]
-        type: "A"
-        port: 9100
-    scrape_interval: 15s
-    metrics_path: "/metrics"
+  # - job_name: "node-exporter"
+  #   dns_sd_configs:
+  #     - names: ["tasks.node-exporter"]
+  #       type: "A"
+  #       port: 9100
+  #   scrape_interval: 15s
+  #   metrics_path: "/metrics"
