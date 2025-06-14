@@ -40,7 +40,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - "--raw"
+        - '--raw'
         - incr
         - ping
     command: sh -c "up-redis.sh"
@@ -52,7 +52,7 @@ services:
     secrets:
       - REDIS_PASSWORD
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-69eab6c8968e1f9966aa24473f82bcffcf95ad97
+    image: kushal0107/fullstack-backend:build-6d3ace34dc7c4470c63b7c172c21acaa3b292988
     deploy:
       replicas: 1
       resources:
@@ -71,9 +71,9 @@ services:
       test:
         - CMD
         - wget
-        - "--no-verbose"
-        - "--tries=1"
-        - "--spider"
+        - '--no-verbose'
+        - '--tries=1'
+        - '--spider'
         - http://localhost:8080/health
     environment:
       - PORT=8080
@@ -93,7 +93,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD
       - REDIS_PASSWORD
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-69eab6c8968e1f9966aa24473f82bcffcf95ad97
+    image: kushal0107/fullstack-frontend:build-6d3ace34dc7c4470c63b7c172c21acaa3b292988
     deploy:
       replicas: 1
       resources:
@@ -112,7 +112,7 @@ services:
       test:
         - CMD
         - curl
-        - "-f"
+        - '-f'
         - http://localhost:5173
       interval: 30s
       timeout: 10s
