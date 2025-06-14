@@ -3,11 +3,6 @@ services:
     image: mongo:8.0.9
     deploy:
       replicas: 1
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 256M
       update_config:
         order: start-first
         failure_action: rollback
@@ -40,7 +35,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - '--raw'
+        - "--raw"
         - incr
         - ping
     command: sh -c "up-redis.sh"
@@ -55,11 +50,6 @@ services:
     image: kushal0107/fullstack-backend:build-78dd403b8cebd69cf4df38b6e931c0e37bcf2ebf
     deploy:
       replicas: 1
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 128M
       update_config:
         order: start-first
         failure_action: rollback
@@ -71,9 +61,9 @@ services:
       test:
         - CMD
         - wget
-        - '--no-verbose'
-        - '--tries=1'
-        - '--spider'
+        - "--no-verbose"
+        - "--tries=1"
+        - "--spider"
         - http://localhost:8080/health
     environment:
       - PORT=8080
@@ -96,11 +86,6 @@ services:
     image: kushal0107/fullstack-frontend:build-78dd403b8cebd69cf4df38b6e931c0e37bcf2ebf
     deploy:
       replicas: 1
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
       update_config:
         order: start-first
         failure_action: rollback
@@ -112,7 +97,7 @@ services:
       test:
         - CMD
         - curl
-        - '-f'
+        - "-f"
         - http://localhost:5173
       interval: 30s
       timeout: 10s
