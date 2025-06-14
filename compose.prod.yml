@@ -29,11 +29,6 @@ services:
     image: redis:8.0.0-alpine
     deploy:
       replicas: 1
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
       update_config:
         order: start-first
         failure_action: rollback
