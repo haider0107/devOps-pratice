@@ -33,29 +33,29 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-  # cadvisor:
-  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
-  #   volumes:
-  #     - /:/rootfs:ro
-  #     - /var/run:/var/run:ro
-  #     - /sys:/sys:ro
-  #     - /var/lib/docker/:/var/lib/docker:ro
-  #     - /dev/disk/:/dev/disk:ro
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #   ports:
-  #     - "8080:8080"
-  #   deploy:
-  #     mode: global
-  #     resources:
-  #       limits:
-  #         memory: 256M
-  #       reservations:
-  #         memory: 128M
-  #   networks:
-  #     - monitoring
-  #   command:
-  #     - "--housekeeping_interval=30s"
-  #     - "--store_container_labels=false"
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "8080:8080"
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    networks:
+      - monitoring
+    command:
+      - "--housekeeping_interval=30s"
+      - "--store_container_labels=false"
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
     command:
