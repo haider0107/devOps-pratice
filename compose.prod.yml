@@ -1,25 +1,4 @@
 services:
-  # fullstack-db:
-  #   image: mongo:8.0.9
-  #   deploy:
-  #     replicas: 1
-  #     update_config:
-  #       order: start-first
-  #       failure_action: rollback
-  #       delay: 10s
-  #     rollback_config:
-  #       parallelism: 1
-  #       order: start-first
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
-  #     - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/MONGO_INITDB_ROOT_PASSWORD
-  #   volumes:
-  #     - fullstack-db-vol:/data/db
-  #   networks:
-  #     - fullstack-network
-  #   secrets:
-  #     - MONGO_INITDB_ROOT_USERNAME
-  #     - MONGO_INITDB_ROOT_PASSWORD
   fullstack-redis:
     image: redis:8.0.0-alpine
     deploy:
@@ -35,7 +14,7 @@ services:
       test:
         - CMD
         - redis-cli
-        - "--raw"
+        - '--raw'
         - incr
         - ping
     command: sh -c "up-redis.sh"
@@ -47,7 +26,7 @@ services:
     secrets:
       - REDIS_PASSWORD
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-a8d770f1edc3beed2dd91f0c7e7da81eaabcebfe
+    image: kushal0107/fullstack-backend:build-86c8e96549d4486a3742ec178a1562c76bc325d3
     deploy:
       replicas: 1
       update_config:
@@ -61,9 +40,9 @@ services:
       test:
         - CMD
         - wget
-        - "--no-verbose"
-        - "--tries=1"
-        - "--spider"
+        - '--no-verbose'
+        - '--tries=1'
+        - '--spider'
         - http://localhost:8080/health
     environment:
       - PORT=8080
@@ -83,7 +62,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD_2
       - REDIS_PASSWORD
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-a8d770f1edc3beed2dd91f0c7e7da81eaabcebfe
+    image: kushal0107/fullstack-frontend:build-86c8e96549d4486a3742ec178a1562c76bc325d3
     deploy:
       replicas: 1
       update_config:
@@ -97,7 +76,7 @@ services:
       test:
         - CMD
         - curl
-        - "-f"
+        - '-f'
         - http://localhost:5173
       interval: 30s
       timeout: 10s
