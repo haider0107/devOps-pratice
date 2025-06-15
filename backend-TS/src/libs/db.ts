@@ -53,7 +53,7 @@ const init = async () => {
 
 init();
 
-const MONGO_URL = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:27017`;
+const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/?retryWrites=true&w=majority`;
 
 // Initialize MongoDB client
 const mongoClient = new MongoClient(MONGO_URL);
