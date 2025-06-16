@@ -9,3 +9,7 @@ devops.kb-blogs.in {
 devops-api.kb-blogs.in {
     reverse_proxy fullstack-backend:8080
 }
+
+monitoring.kb-blogs.in {
+    reverse_proxy grafana:3000
+}
