@@ -19,7 +19,7 @@ services:
     networks:
       - shared-net
     configs:
-      - source: Caddyfile
+      - source: Caddyfile_V2
         target: /etc/caddy/Caddyfile
 networks:
   shared-net:
@@ -27,5 +27,5 @@ volumes:
   caddy_data: null
   caddy_config: null
 configs:
-  Caddyfile:
+  Caddyfile_V2:
     file: ./Caddyfile
