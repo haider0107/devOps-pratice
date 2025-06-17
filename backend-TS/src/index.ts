@@ -41,7 +41,7 @@ app.get('/health', (_req: Request, res: Response) => {
 
 app.get('/version', (_req: Request, res: Response) => {
   res.status(200).json({
-    version: 'v5.1.0',
+    version: 'v5.1.1',
     host: process.env.NODE_HOST,
   });
 });
