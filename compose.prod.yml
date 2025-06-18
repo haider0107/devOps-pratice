@@ -26,7 +26,7 @@ services:
     secrets:
       - REDIS_PASSWORD
   fullstack-backend:
-    image: kushal0107/fullstack-backend:build-3316263a8abb58f3ef98a0939fdcd3f52a970dd4
+    image: kushal0107/fullstack-backend:build-4b06a875cac1d110ac9d0a43ca58b250a9847763
     deploy:
       replicas: 1
       update_config:
@@ -62,7 +62,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD_2
       - REDIS_PASSWORD
   fullstack-frontend:
-    image: kushal0107/fullstack-frontend:build-3316263a8abb58f3ef98a0939fdcd3f52a970dd4
+    image: kushal0107/fullstack-frontend:build-4b06a875cac1d110ac9d0a43ca58b250a9847763
     deploy:
       replicas: 1
       update_config:
