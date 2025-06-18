@@ -1,6 +1,6 @@
 # 🚀 Fullstack Dockerized App with CI/CD & Monitoring
 
-[https://www.youtube.com/watch?v=zu43f9Y2u4k&ab_channel=KushalBhargava](https://www.youtube.com/watch?v=zu43f9Y2u4k&ab_channel=KushalBhargava)
+[![Watch the video](https://img.youtube.com/vi/zu43f9Y2u4k/0.jpg)](https://www.youtube.com/watch?v=zu43f9Y2u4k&ab_channel=KushalBhargava)
 
 This is a fullstack web application built with a modern tech stack, fully containerized with Docker Swarm. It features an optimized Dockerfile using multi-stage builds, robust CI/CD pipelines with GitHub Actions, and full monitoring through Prometheus, Grafana, and system exporters.
 
